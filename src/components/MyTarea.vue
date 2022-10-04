@@ -9,22 +9,23 @@
                         <div class="input-group">
                            <input type="text" v-model="tareita" class="form-control form-control-lg" placeholder="Agregar tarea">
                         <div class="input-group-append">
-                            <button v-on:click="agregarTarea()" class="btn btn-success btn-lg">
-                                Agregar
-                            </button>
+                            <button v-on:click="agregarTarea()" class="btn btn-success btn-lg">Agregar</button>
                         </div>
                 </div>
+
                 <br>
+
+                <h5 v-if="listTareas.length ==0">No hay tareas para realizar</h5>
               
                 <ul class="list-group">
-                    <li v-for="(MyTarea,index) of listTareas" :key="index" 
-                        class="list-group-item d-flex justify-content-between">
-                        <span class="material-symbols-outlined cursor">
-                            circle
-                        </span>
-                        {{MyTarea.nombre}}
-                        <span class="material-symbols-outlined text-danger cursor">
-                            delete
+                    <li v-for="(MyTarea,index) of listTareas" :key="index" class="list-group-item d-flex justify-content-between">
+                        <span class="cursor" v-bind:class="{'text-success': MyTarea.estado}"
+                        v-on:click="editarTarea(MyTarea, index)">
+                            <i v-bind:class="[MyTarea.estado ? 'fa-solid fa-circle-check' : 'far fa-circle']"></i>
+                       </span>
+                          {{MyTarea.nombre}}
+                        <span class="text-danger cursor" v-on:click="eliminarTarea(index)">
+                            <i class="fas fa-trash-alt"></i>
                         </span>
                     </li>
                  </ul>
@@ -52,9 +53,16 @@
             }
             this.listTareas.push(tareita);
             this.tareita = "";
+        },
+
+        eliminarTarea(index){
+            this.listTareas.splice(index, 1)
+        },
+        editarTarea(MyTarea, index){
+            this.listTareas[index].estado =  !MyTarea.estado
         }
-      }
-  }
+    }
+}
 </script>
 
 <style scoped>
